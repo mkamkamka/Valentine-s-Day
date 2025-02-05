@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: #ffebee;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    h1 {
+      color: #d32f2f;
+      font-size: 3rem;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+    .buttons {
+      display: flex;
+      gap: 20px;
+      z-index: 1;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 1;
+    }
+    #yesButton {
+      background-color: #4caf50;
+      color: white;
+    }
+    #noButton {
+      background-color: #f44336;
+      color: white;
+    }
+    #yesButton:hover {
+      background-color: #45a049;
+    }
+    #noButton:hover {
+      background-color: #e53935;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #d32f2f;
+      z-index: 1;
+    }
+    .flower {
+      position: absolute;
+      font-size: 24px;
+      color: #ff4081;
+      animation: fall linear infinite;
+      user-select: none;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(-10%);
+      }
+      100% {
+        transform: translateY(110vh);
+      }
+    }
+    .flower-effect {
+      position: absolute;
+      font-size: 48px;
+      color: #ff4081;
+      animation: bloom 1s ease-out;
+      user-select: none;
+    }
+    @keyframes bloom {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+    .sad-image, .happy-image {
+      position: absolute;
+      width: 200px; /* Larger size */
+      height: auto;
+      z-index: 1;
+    }
+    .sad-image {
+      animation: fadeOut 2s ease-out forwards;
+    }
+    .happy-image {
+      top: 20px;
+      right: 20px;
+    }
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Will you be my Valentine?</h1>
+  <div class="buttons">
+    <button id="yesButton">Yes</button>
+    <button id="noButton">No</button>
+  </div>
+  <div class="message" id="message"></div>
+
+  <script>
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const message = document.getElementById('message');
+
+    // Function to create falling flowers
+    function createFallingFlowers() {
+      const flower = document.createElement('div');
+      flower.innerHTML = '🌸';
+      flower.classList.add('flower');
+      flower.style.left = `${Math.random() * 100}vw`;
+      flower.style.animationDuration = `${Math.random() * 5 + 5}s`;
+      document.body.appendChild(flower);
+
+      // Remove flower after animation ends
+      setTimeout(() => {
+        flower.remove();
+      }, 10000);
+    }
+
+    // Create falling flowers every 500ms
+    setInterval(createFallingFlowers, 500);
+
+    // Function to create flower effects
+    function createFlowerEffect(x, y) {
+      const flower = document.createElement('div');
+      flower.innerHTML = '🌸';
+      flower.classList.add('flower-effect');
+      flower.style.left = `${x}px`;
+      flower.style.top = `${y}px`;
+      document.body.appendChild(flower);
+
+      // Remove flower after animation ends
+      setTimeout(() => {
+        flower.remove();
+      }, 1000);
+    }
+
+    // Function to show a temporary sad cat image at random locations
+    function showSadImage() {
+      const sadImage = document.createElement('img');
+      sadImage.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1TpNa2GGqs3Hos_sGEfrZn_iMf2ZNhPbN-w&s'; // Side-eye cat image
+      sadImage.classList.add('sad-image');
+
+      // Random position for the sad cat image
+      const x = Math.random() * (window.innerWidth - 200); // 200 is the image width
+      const y = Math.random() * (window.innerHeight - 200); // 200 is the image height
+      sadImage.style.left = `${x}px`;
+      sadImage.style.top = `${y}px`;
+
+      document.body.appendChild(sadImage);
+
+      // Remove image after animation ends
+      setTimeout(() => {
+        sadImage.remove();
+      }, 2000);
+    }
+
+    // Function to show a happy cat image (stays on screen)
+    function showHappyImage() {
+      const happyImage = document.createElement('img');
+      happyImage.src = 'https://memedepot.com/cdn-cgi/imagedelivery/naCPMwxXX46-hrE49eZovw/f8f487a7-16da-4015-d56b-d322b541cc00/public'; // Happy cat image
+      happyImage.classList.add('happy-image');
+      document.body.appendChild(happyImage);
+    }
+
+    yesButton.addEventListener('click', (e) => {
+      message.textContent = 'Yayyyy!';
+      yesButton.style.display = 'none';
+      noButton.style.display = 'none';
+
+      // Add flower effects around the message
+      for (let i = 0; i < 10; i++) {
+        const x = e.clientX + (Math.random() - 0.5) * 200;
+        const y = e.clientY + (Math.random() - 0.5) * 200;
+        createFlowerEffect(x, y);
+      }
+
+      // Show a happy cat image (stays on screen)
+      showHappyImage();
+    });
+
+    noButton.addEventListener('click', () => {
+      const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+      noButton.style.position = 'absolute';
+      noButton.style.left = `${x}px`;
+      noButton.style.top = `${y}px`;
+
+      // Show a sad cat image at a random location
+      showSadImage();
+    });
+  </script>
+</body>
+</html>
